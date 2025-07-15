@@ -37,6 +37,17 @@
 				</div>
 				<div class="col-6">
 					<div class="mb-10">
+						<label for="project" class="required form-label">Project</label>
+						<select class="form-select form-select-solid" name="project_name" data-control="select2" data-placeholder="Project">
+						<option></option>
+						{{for project in project_lists:}}
+							<option value="{{=project['project_name']}}"  >{{=project['project_name']}}</option>  
+						{{pass}}
+					</select>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-10">
 						<label for="role_name" id="role_name" class="required form-label">Role Name</label>
 						<input type="text" name="role_name" class="form-control form-control-solid" placeholder="Role Name"/>
 					</div>

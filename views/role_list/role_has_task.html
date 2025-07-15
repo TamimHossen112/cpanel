@@ -29,7 +29,7 @@
 				<div class="col-6">
 					<div class="mb-10">
 						<label for="cid" class="required form-label">SBU</label>
-						<select class="form-select form-select-solid" name="cid" data-control="select2" data-placeholder="SBU">
+						<select class="form-select form-select-solid" name="cid" data-control="select2" data-placeholder="SBU" readonly>
 						<option></option>
 						{{for business_unit in business_units:}}
 							<option value="{{=business_unit['sbu_name']}}" selected >{{=business_unit['sbu_name']}}</option>  
@@ -40,7 +40,7 @@
 				<div class="col-6">
 					<div class="mb-10">
 						<label for="role_name" id="role_name" class="required form-label">Role Name</label>
-						<input type="text" name="role_name"  value="{{=roles.role_name}}" class="form-control form-control-solid" placeholder="Role Name"/>
+						<input type="text" name="role_name"  value="{{=roles.role_name}}" class="form-control form-control-solid" placeholder="Role Name" readonly/>
 						<input type="hidden" name="role_id"  value="{{=roles.id}}"/>
 					</div>
 				</div>
@@ -52,6 +52,51 @@
 							<!--begin::Title-->
 							<h2 class="text-gray-800 fw-bold mb-4">Task List</h2>
 							<!--end::Title-->
+							<div class="mb-5">
+								<input type="text" id="taskGroupFilter" class="form-control" placeholder="Filter by group or task name..." style="height:40px; border-color:#0d6efd;">
+							</div>
+							<script>
+							document.addEventListener('DOMContentLoaded', function() {
+								const filterInput = document.getElementById('taskGroupFilter');
+								filterInput.addEventListener('input', function() {
+									const filter = this.value.toLowerCase();
+									document.querySelectorAll('.m-0').forEach(function(section) {
+										const groupTitle = section.querySelector('h4').textContent.toLowerCase();
+										let match = groupTitle.includes(filter);
+										let anyTaskMatch = false;
+										section.querySelectorAll('.form-check-label').forEach(function(label) {
+											if (label.textContent.toLowerCase().includes(filter)) {
+												match = true;
+												anyTaskMatch = true;
+											}
+										});
+										section.style.display = match ? '' : 'none';
+										// Highlight matched group title
+										const h4 = section.querySelector('h4');
+										if (filter && groupTitle.includes(filter)) {
+											h4.style.backgroundColor = '#45818e';
+										} else {
+											h4.style.backgroundColor = '';
+										}
+										// Highlight matched tasks
+										section.querySelectorAll('.form-check-label').forEach(function(label) {
+											if (filter && label.textContent.toLowerCase().includes(filter)) {
+												label.style.backgroundColor = '#45818e';
+											} else {
+												label.style.backgroundColor = '';
+											}
+										});
+										// Expand/collapse group based on match
+										const collapseDiv = section.querySelector('.collapse');
+										if (match && collapseDiv) {
+											collapseDiv.classList.add('show');
+										} else if (collapseDiv) {
+											collapseDiv.classList.remove('show');
+										}
+									});
+								});
+							});
+							</script>
 							<!--begin::Accordion-->
 							{{for groups in fin_task_list:}}
 							{{views=''
@@ -105,9 +150,9 @@
 												</label>
 											</div>
 											{{pass}}								
-										</div>
-										<!--end::Text-->
 									</div>
+										<!--end::Text-->
+								</div>
 								<!--end::Content-->
 								<!--begin::Separator-->
 								<div class="separator separator-dashed"></div>

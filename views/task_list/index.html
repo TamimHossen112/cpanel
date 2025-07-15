@@ -42,6 +42,28 @@
                   </div>
                   <div class="col-md-3">
                     <div class="mb-10">
+                      <select class="form-select form-select-solid" name="project_name" data-control="select2" data-placeholder="Project Name" data-allow-clear="true">
+                        <option value=""></option>
+                          {{for project in project_lists:}}  
+                            <option value="{{=project['project_name']}}" {{if str(project['project_name']) == str(request.vars.project_name):}} selected {{pass}}>{{=project['project_name']}}</option>   
+                          {{pass}}
+                      </select>
+                    </div>
+
+                  </div>
+                  <div class="col-md-3">
+                    <div class="mb-10">
+                      <select class="form-select form-select-solid" name="group_id" data-control="select2" data-placeholder="Group Name" data-allow-clear="true">
+                        <option value=""></option>
+                          {{for group in task_groups:}}  
+                            <option value="{{=group['id']}}" {{if str(group['id']) == str(request.vars.group_id):}} selected {{pass}}>{{=group['group_name']}}</option>   
+                          {{pass}}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="mb-10">
                         <select class="form-select form-select-solid" name="task_id" data-control="select2" data-placeholder="Task name" data-allow-clear="true">
                           <option value=""></option>
                             {{for task in task_lists:}}  
@@ -51,6 +73,8 @@
                     </div>
 
                   </div>
+
+
                   <div class="col">
                     <div class="d-flex justify-content-end">
                       <div class="mb-10">
@@ -213,6 +237,8 @@
             d.rows_per_page = d.length;
             d.orderColumn = d.order[0].task_name
             d.orderDirection = d.order[0].dir
+            d.project_name = $("select[name='project_name']").val()
+            d.group_id = $("select[name='group_id']").val()
             d.task_id = $("select[name='task_id']").val()
         },
         dataSrc: function(json) {
@@ -228,6 +254,25 @@
           data: 'cid',
           title:'SBU',
           class:'min-w-50px'
+        },
+        {
+          data: 'pid',
+          title:'Project Name',
+          class:'min-w-50px'
+        },
+         {
+          data: 'group_name',
+          title:'Group Name',
+          class:'min-w-125px',
+          render: function(data, type, row){
+            return `
+            <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column">
+                      <a href="#" class="text-gray-800 text-hover-primary mb-1">${data}</a>
+                    </div>
+            </div>       
+            `
+          }
         },
         
         {
@@ -258,20 +303,7 @@
             `
           }
         },
-        {
-          data: 'group_name',
-          title:'Group Name',
-          class:'min-w-125px',
-          render: function(data, type, row){
-            return `
-            <div class="d-flex align-items-center">
-                    <div class="d-flex flex-column">
-                      <a href="#" class="text-gray-800 text-hover-primary mb-1">${data}</a>
-                    </div>
-            </div>       
-            `
-          }
-        },
+       
         
         {
           title:'Status',

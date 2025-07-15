@@ -14,9 +14,19 @@ def index():
         isSearch = True
     
     sql = """
-    SELECT * from business_units where sbu_name="TCL"
+    SELECT * from business_units
     """
     business_units = db.executesql(sql, as_dict=True) 
+    
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
+    
+    sql = """
+    SELECT * from u_task_group
+    """
+    task_groups = db.executesql(sql, as_dict=True) 
     
     sql = """
     SELECT * from u_tasks
@@ -35,9 +45,15 @@ def create():
     # if session.emp_role in ['management','unit_management']:
     #     return "Access Denied"
     sql = """
-    SELECT * from business_units where sbu_name="TCL"
+    SELECT * from business_units
     """
     business_units = db.executesql(sql, as_dict=True)
+    
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
+    
     sql = """
     SELECT * from u_task_group where cid="TCL"
     """
@@ -54,6 +70,7 @@ def submit():
     #     redirect(URL(c='login',f='index'))
     
     cid = request.vars.cid
+    project_name = request.vars.project_name
     group_id = request.vars.group_id
     task_name = request.vars.task_name
     task_description = request.vars.task_description
@@ -65,6 +82,8 @@ def submit():
     errors =[]
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
     if not group_id:
         errors.append('Group Name is required.')
     if not task_name:
@@ -91,7 +110,8 @@ def submit():
         redirect (URL('task_list','create'))
         
     db.u_tasks.insert(
-            cid=str(cid),
+            cid=str(cid),            
+            pid=str(project_name),
             task_name=str(task_name),
             task_description=str(task_description),
             group_id=str(group_id),
@@ -121,14 +141,20 @@ def edit():
         tasks=db(db.u_tasks.id==request.args(0)).select().first()
         
         sql = """
-        SELECT * from business_units where sbu_name="TCL"
+        SELECT * from business_units
         """
         business_units = db.executesql(sql, as_dict=True)
+        
+        sql = """
+        SELECT * from projects 
+        """
+        project_lists = db.executesql(sql, as_dict=True)
+
         sql = """
         SELECT * from u_task_group where cid="TCL"
         """
         task_groups = db.executesql(sql, as_dict=True)
-        return dict(tasks=tasks,task_groups=task_groups,business_units=business_units)
+        return dict(tasks=tasks,task_groups=task_groups,business_units=business_units, project_lists=project_lists)
 
 def update():
     task_id='role_management'
@@ -141,6 +167,7 @@ def update():
         
 
     cid = request.vars.cid
+    project_name = request.vars.project_name
     group_id = request.vars.group_id
     task_name = request.vars.task_name
     task_description = request.vars.task_description
@@ -152,6 +179,8 @@ def update():
     errors =[]
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
     if not group_id:
         errors.append('Group Name is required.')
     if not task_name:
@@ -182,6 +211,7 @@ def update():
 
     tasks.update_record(
         cid=str(cid),
+        pid=str(project_name),
         task_name=str(task_name),
         task_description=str(task_description),
         group_id=str(group_id),
@@ -238,6 +268,13 @@ def get_data():
     if  request.vars.cid != None and request.vars.cid != '':
         cid = str(request.vars.cid)
         conditions += " and cid = '"+cid+"'"
+    if  request.vars.project_name != None and request.vars.project_name !='':
+        project_name = str(request.vars.project_name)
+        conditions += " and pid = '"+project_name+"'"
+    if  request.vars.group_id != None and request.vars.group_id !='':
+        group_id = str(request.vars.group_id)
+        conditions += " and group_id = '"+group_id+"'"
+        
     if  request.vars.task_id != None and request.vars.task_id !='':
         id = str(request.vars.task_id)
         conditions = conditions +" and id = '"+id+"'"
@@ -245,7 +282,9 @@ def get_data():
         #Search End## 
 
     ##Paginate Start##
-    total_rows = len(db.executesql("SELECT * from u_tasks WHERE 1" +conditions, as_dict=True))
+    total_result = db.executesql("SELECT count(id) as total_row from u_tasks WHERE 1" +conditions, as_dict=True)
+    total_rows = total_result[0]['total_row'] if total_result else 0
+    
     page = int(request.vars.page or 1)
     rows_per_page = int(request.vars.rows_per_page or 10)
     if rows_per_page == -1:

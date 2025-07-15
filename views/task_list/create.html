@@ -37,6 +37,18 @@
 				</div>
 				<div class="col-6">
 					<div class="mb-10">
+						<label for="project" class="required form-label">Project</label>
+						<select class="form-select form-select-solid" name="project_name" data-control="select2" data-placeholder="Project">
+						<option></option>
+						{{for project in project_lists:}}
+							<option value="{{=project['project_name']}}"  >{{=project['project_name']}}</option>  
+						{{pass}}
+					</select>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="mb-10">
 						<label for="cid" class="required form-label">Group Name</label>
 						<select class="form-select form-select-solid" name="group_id" data-control="select2" data-placeholder="Group Name">
 						<option></option>

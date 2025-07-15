@@ -42,6 +42,17 @@
                   </div>
                   <div class="col-md-3">
                     <div class="mb-10">
+                      <select class="form-select form-select-solid" name="project_name" data-control="select2" data-placeholder="Project Name" data-allow-clear="true">
+                        <option value=""></option>
+                          {{for project in project_lists:}}  
+                            <option value="{{=project['project_name']}}" {{if str(project['project_name']) == str(request.vars.project_name):}} selected {{pass}}>{{=project['project_name']}}</option>   
+                          {{pass}}
+                      </select>
+                    </div>
+
+                  </div>
+                  <div class="col-md-3">
+                    <div class="mb-10">
                         <select class="form-select form-select-solid" name="role_id" data-control="select2" data-placeholder="Role name" data-allow-clear="true">
                           <option value=""></option>
                             {{for role in role_lists:}}  
@@ -213,6 +224,7 @@
             d.rows_per_page = d.length;
             d.orderColumn = d.order[0].role_name
             d.orderDirection = d.order[0].dir
+            d.project_name = $("select[name='project_name']").val()
             d.role_id = $("select[name='role_id']").val()
         },
         dataSrc: function(json) {
@@ -227,6 +239,12 @@
         {
           data: 'cid',
           title:'SBU',
+          class:'min-w-50px'
+        },
+        
+        {
+          data: 'pid',
+          title:'Project Name',
           class:'min-w-50px'
         },
         

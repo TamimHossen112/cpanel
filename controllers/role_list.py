@@ -9,9 +9,14 @@ def index():
         isSearch = True
     
     sql = """
-    SELECT * from business_units where sbu_name="TCL"
+    SELECT * from business_units 
     """
     business_units = db.executesql(sql, as_dict=True) 
+    
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
     
     sql = """
     SELECT * from u_roles
@@ -25,9 +30,15 @@ def create():
     # if session.emp_role in ['management','unit_management']:
     #     return "Access Denied"
     sql = """
-    SELECT * from business_units where sbu_name="TCL"
+    SELECT * from business_units 
     """
     business_units = db.executesql(sql, as_dict=True)
+    
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
+    
     return locals()
 
 
@@ -36,6 +47,7 @@ def submit():
         redirect(URL(c='login',f='index'))
     
     cid = request.vars.cid
+    project_name = request.vars.project_name
     role_name = request.vars.role_name
     role_description = request.vars.role_description
     if request.vars.status is not None:
@@ -46,6 +58,9 @@ def submit():
     errors =[]
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
+        
     if not role_name:
         errors.append('Role Name is required.')
 
@@ -57,6 +72,10 @@ def submit():
         session.flash = {"msg_type":"error","msg":msg}
         redirect (URL('role_list','create'))
     # validation end
+    
+    role_name=str(role_name).lower()
+    role_name=role_name.replace(" ","_")
+    
     old_role=db((db.u_roles.role_name==str(role_name))).select()
     if len(old_role) > 0:
         session.flash = {"msg_type":"error","msg":"Role is Duplicate"}
@@ -64,6 +83,7 @@ def submit():
     
     db.u_roles.insert(
             cid=str(cid),
+            pid=str(project_name),
             role_name=str(role_name),
             role_description=str(role_description),
             status=str(status),
@@ -89,13 +109,19 @@ def edit():
         SELECT * from business_units where sbu_name="TCL"
         """
         business_units = db.executesql(sql, as_dict=True)
-        return dict(roles=roles,business_units=business_units)
+        
+        sql = """
+        SELECT * from projects
+        """
+        project_lists = db.executesql(sql, as_dict=True)
+        return dict(roles=roles,business_units=business_units, project_lists=project_lists)
 
 def update():
     if session.status=="" or session.status==None:
         redirect(URL(c='login',f='index'))        
 
     cid = request.vars.cid
+    project_name = request.vars.project_name
     role_name = request.vars.role_name
     role_description = request.vars.role_description
     if request.vars.status is not None:
@@ -106,6 +132,8 @@ def update():
     errors =[]
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
     if not role_name:
         errors.append('Role Name is required.')
 
@@ -120,6 +148,8 @@ def update():
     
     roles=db(db.u_roles.id==request.args(0)).select().first()
     
+    role_name=str(role_name).lower()
+    role_name=role_name.replace(" ","_")
     
     old_role=db((db.u_roles.role_name==str(role_name)) & (db.u_roles.id!=request.args(0))).select()
     if len(old_role) > 0:
@@ -128,6 +158,7 @@ def update():
 
     roles.update_record(
         cid=str(cid),
+        pid=str(project_name),
         role_name=str(role_name),
         role_description=str(role_description),
         status=str(status),
@@ -143,10 +174,6 @@ def update():
 def delete():
     if session.status=="" or session.status==None:
         redirect(URL(c='login',f='index'))
-
-    if session.emp_role in ['management','unit_management','unit_system_admin']:
-            return "Access Denied"
-    
     
     if request.args(0):
         role_tasks=db(db.u_role_has_tasks.role_id==request.args(0)).select()
@@ -171,6 +198,11 @@ def get_data():
     if  request.vars.cid != None and request.vars.cid != '':
         cid = str(request.vars.cid)
         conditions += " and cid = '"+cid+"'"
+        
+    if  request.vars.project_name != None and request.vars.project_name != '':
+        project_name = str(request.vars.project_name)
+        conditions += " and pid = '"+project_name+"'"
+        
     if  request.vars.role_id != None and request.vars.role_id !='':
         id = str(request.vars.role_id)
         conditions = conditions +" and id = '"+id+"'"
@@ -178,7 +210,9 @@ def get_data():
         #Search End## 
 
     ##Paginate Start##
-    total_rows = len(db.executesql("SELECT * from u_roles WHERE 1" +conditions, as_dict=True))
+    total_result = db.executesql("SELECT count(id) as total_row from u_roles WHERE 1" +conditions, as_dict=True)
+    total_rows = total_result[0]['total_row'] if total_result else 0
+    
     page = int(request.vars.page or 1)
     rows_per_page = int(request.vars.rows_per_page or 10)
     if rows_per_page == -1:

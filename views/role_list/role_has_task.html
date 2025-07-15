@@ -1,0 +1,192 @@
+{{extend 'layout.html'}}
+{{block header}}
+{{controller_name = 'Role has task'}}
+{{function_name='Index'}}
+{{end}}
+{{block content}}
+  <!--begin::Content-->
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+      <!--begin::Card-->
+      <div class="card">
+        <!--begin::Card header-->
+        <!-- <div class="card-header border-0 pt-6">
+        
+          <div class="card-title">
+            
+          </div>
+         
+         
+        </div> -->
+        <!--end::Card header-->
+        <!--begin::Card body-->
+        <div class="card-body mt-2">
+		
+			<form action="{{=URL('role_list','role_has_task_submit')}}" method="post">
+
+			<div class="row">
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="cid" class="required form-label">SBU</label>
+						<select class="form-select form-select-solid" name="cid" data-control="select2" data-placeholder="SBU">
+						<option></option>
+						{{for business_unit in business_units:}}
+							<option value="{{=business_unit['sbu_name']}}" selected >{{=business_unit['sbu_name']}}</option>  
+						{{pass}}
+					</select>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="role_name" id="role_name" class="required form-label">Role Name</label>
+						<input type="text" name="role_name"  value="{{=roles.role_name}}" class="form-control form-control-solid" placeholder="Role Name"/>
+						<input type="hidden" name="role_id"  value="{{=roles.id}}"/>
+					</div>
+				</div>
+                <div class="col-12">	
+
+					<div class="mb-10">
+
+						<div class="col-md-6 pe-md-10 mb-10 mb-md-0">
+							<!--begin::Title-->
+							<h2 class="text-gray-800 fw-bold mb-4">Task List</h2>
+							<!--end::Title-->
+							<!--begin::Accordion-->
+							{{for groups in fin_task_list:}}
+							{{views=''
+								tgl='collapsed'
+								for task in groups['task_list']:
+									if str(task['task_id']) in role_task_list:
+										views='show'
+										tgl='active'
+										break
+								pass}}
+							<!--begin::Section-->
+							<div class="m-0">
+								<!--begin::Heading-->
+								<div class="d-flex align-items-center collapsible py-3 toggle mb-0 {{=tgl}}" data-bs-toggle="collapse" data-bs-target="#{{=str(groups['group_name']).replace(' ','_')}}" aria-expanded="false">
+									<!--begin::Icon-->
+									<div class="btn btn-sm btn-icon mw-20px btn-active-color-primary me-5">
+										<!--begin::Svg Icon | path: icons/duotune/general/gen036.svg-->
+										<span class="svg-icon toggle-on svg-icon-primary svg-icon-1">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"></rect>
+												<rect x="6.0104" y="10.9247" width="12" height="2" rx="1" fill="currentColor"></rect>
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+										<!--begin::Svg Icon | path: icons/duotune/general/gen035.svg-->
+										<span class="svg-icon toggle-off svg-icon-1">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"></rect>
+												<rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="currentColor"></rect>
+												<rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="currentColor"></rect>
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+									</div>
+									<!--end::Icon-->
+									<!--begin::Title-->
+									<h4 class="text-gray-700 fw-bold cursor-pointer mb-0">{{=str(groups['group_name'])}}</h4>
+									<!--end::Title-->
+								</div>
+								<!--end::Heading-->
+								
+								<!--begin::Body-->
+								<div id="{{=str(groups['group_name']).replace(' ','_')}}" class="fs-6 ms-1 collapse {{=views}}" style="">
+									<!--begin::Text-->
+									<div class="mb-4 text-gray-600 fw-semibold fs-6 ps-10">
+											{{for task in groups['task_list']:}}
+											<div class="form-check form-check-custom form-check-solid form-check-sm mb-4">
+												<input class="form-check-input" type="checkbox" value="{{=task['task_id']}}||{{=task['task_name']}}" id="flexRadioLg" name="task_ids[]" {{if str(task['task_id']) in role_task_list:}} checked {{pass}}/>
+												<label class="form-check-label" for="flexRadioLg">
+													{{=str(task['task_name'])}}
+												</label>
+											</div>
+											{{pass}}								
+										</div>
+										<!--end::Text-->
+									</div>
+								<!--end::Content-->
+								<!--begin::Separator-->
+								<div class="separator separator-dashed"></div>
+								<!--end::Separator-->
+							</div>
+							<!--end::Section-->
+							{{pass}}
+							
+							<!--end::Accordion-->
+						</div>
+
+					</div>
+						
+				</div>
+				
+            </div>
+				  
+			<div class="row">
+				<div class="col">
+					<div class="card-toolbar">
+						<!--begin::Toolbar-->
+						<div class="d-flex justify-content-start" data-kt-user-table-toolbar="base">
+					
+					
+							<!--begin::Add user-->
+							<button type="submit" class="btn btn-primary me-3">
+				
+								<span class="svg-icon svg-icon-2">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="currentColor"/>
+										<path d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.20001C9.70001 3 10.2 3.20001 10.4 3.60001ZM16 11.6L12.7 8.29999C12.3 7.89999 11.7 7.89999 11.3 8.29999L8 11.6H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V11.6H16Z" fill="currentColor"/>
+										<path opacity="0.3" d="M11 11.6V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V11.6H11Z" fill="currentColor"/>
+									</svg>
+								</span>
+								Update
+							</button>
+					
+
+							<!--begin::Export-->
+							<a href="{{=URL('role_list','index')}}" class="btn btn-light-primary">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+									<span class="svg-icon svg-icon-2">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor"/>
+											<path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor"/>
+										</svg>
+									</span>
+									Back
+							</a>
+								<!--end::Svg Icon-->
+								<!--end::Export-->
+							<!--end::Add user-->
+					</div>
+					<!--end::Toolbar-->
+			
+				
+				</div>
+				</div>
+			</div>
+			</form>
+       
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Card-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::Content-->
+{{end}}
+
+{{block script}}
+<script>
+	$(".kt_datepicker_flat").flatpickr();
+</script>
+
+{{end}}
+
+
+
+
+

@@ -1,0 +1,241 @@
+{{extend 'layout.html'}}
+
+
+{{block content}}
+  <!--begin::Content-->
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+      <!--begin::Card-->
+      <div class="card">
+        <!--begin::Card header-->
+        <!-- <div class="card-header border-0 pt-6">
+        
+          <div class="card-title">
+            
+          </div>
+         
+         
+        </div> -->
+        <!--end::Card header-->
+        <!--begin::Card body-->
+        <div class="card-body mt-2">
+		
+			<form action="{{=URL('users','submit')}}" method="post" enctype="multipart/form-data">
+
+			<div class="row mb-6">
+				<!--begin::Label-->
+				<label class="col-lg-4 col-form-label fw-semibold fs-6">Image</label>
+				<!--end::Label-->
+				<!--begin::Col-->
+				<div class="col-lg-12">
+					<!--begin::Image input-->
+					<div class="image-input image-input-outline" data-kt-image-input="true">
+						<!--begin::Preview existing avatar-->
+						<div class="image-input-wrapper w-125px h-125px" style="background-image: url({{=URL('static','images/default_profile.png')}})"></div>
+						<!--end::Preview existing avatar-->
+						<!--begin::Label-->
+						<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
+							<i class="bi bi-pencil-fill fs-7"></i>
+							<!--begin::Inputs-->
+							<input type="file" name="image_path" accept=".png, .jpg, .jpeg" />
+							<input type="hidden" name="avatar_remove" />
+							<!--end::Inputs-->
+						</label>
+						<!--end::Label-->
+						<!--begin::Cancel-->
+						<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+							<i class="bi bi-x fs-2"></i>
+						</span>
+						<!--end::Cancel-->
+						<!--begin::Remove-->
+						<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
+							<i class="bi bi-x fs-2"></i>
+						</span>
+						<!--end::Remove-->
+					</div>
+					<!--end::Image input-->
+					<!--begin::Hint-->
+					<div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+					<!--end::Hint-->
+				</div>
+				<!--end::Col-->
+			</div>
+
+			<div class="row">	
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="cid" class="required form-label">SBU</label>
+						<select class="form-select form-select-solid" name="cid" data-control="select2" data-placeholder="sbu">
+						<option></option>
+							{{for business_unit in business_units:}}
+							<option value="{{=business_unit['sbu_name']}}" {{if str(business_unit['sbu_name']) == str(request.vars.cid):}} selected {{pass}}>{{=business_unit['sbu_name']}}</option>  
+							{{pass}}
+					</select>
+					</div>
+				</div>
+				{{task_id='user_role_field'
+					access_permission=check_role(task_id)    
+					if ((access_permission!=False)):}}
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="user_role" class="required form-label">User Role</label>
+						<select class="form-select form-select-solid" name="user_role" data-control="select2" data-placeholder="user role">
+						<option></option>
+						{{for user_role in user_roles:}}
+						<option value="{{=user_role['id']}}||{{=user_role['role_name']}}" {{if str(user_role['role_name']) == str(request.vars.user_role):}} selected {{pass}}>{{=user_role['role_name']}}</option>  
+						{{pass}}
+						</select>
+					</div>
+				</div>
+				{{pass}}
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="first_name" class="required form-label">First Name</label>
+						<input type="text" name="first_name" class="form-control form-control-solid" placeholder="first name"/>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="last_name" class="required form-label">Last Name</label>
+						<input type="text" name="last_name" class="form-control form-control-solid" placeholder="last name"/>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="email" class="required form-label">Email</label>
+						<input type="email" name="email" class="form-control form-control-solid" placeholder="email"/>
+					</div>
+				</div>		
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="password" class="required form-label">Password</label>
+						<input type="password" name="password" class="form-control form-control-solid" placeholder="password"/>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-10">
+						<label for="mobile" class="required form-label">Mobile</label>
+						<input type="text" name="mobile" class="form-control form-control-solid" placeholder="mobile"/>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-10">
+					<label for="location" class="required form-label">Location</label>
+					<input type="text" name="location" class="form-control form-control-solid" placeholder="location"/>
+					</div>
+				</div>
+				
+				
+				<div class="col-6">
+					<div class="mb-10 fv-row">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-stack">
+							<!--begin::Label-->
+							
+							<div class="fw-semibold me-5">
+								<label class="fs-6">Gender</label>
+							</div>
+							<!--begin::Checkboxes-->
+							<div class="d-flex align-items-center">
+								<!--begin::Checkbox-->
+								<label class="form-check form-check-custom form-check-solid me-10">
+									<input class="form-check-input h-20px w-20px" type="radio" name="gender" value="Male" checked="checked">
+									<span class="form-check-label fw-semibold">Male</span>
+								</label>
+								<!--end::Checkbox-->
+								<!--begin::Checkbox-->
+								<label class="form-check form-check-custom form-check-solid">
+									<input class="form-check-input h-20px w-20px" type="radio" name="gender" value="Female">
+									<span class="form-check-label fw-semibold">Female</span>
+								</label>
+								<!--end::Checkbox-->
+							</div>
+							<!--end::Checkboxes-->
+							<!--end::Label-->
+						
+						</div>
+						<!--end::Wrapper-->
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="mb-8">
+						<!--begin::Label-->
+						<div class="me-5">
+							<label class="fs-6 fw-semibold">Status</label>
+						</div>
+						<!--end::Label-->
+						<!--begin::Switch-->
+						<label class="form-check form-switch form-check-custom form-check-solid">
+							<input class="form-check-input" type="checkbox" name="status" value=1 checked="checked">
+							<span class="form-check-label fw-semibold text-muted">Active</span>
+						</label>
+						<!--end::Switch-->
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<div class="card-toolbar">
+						<!--begin::Toolbar-->
+						<div class="d-flex justify-content-start" data-kt-user-table-toolbar="base">	
+						<!--begin::Add user-->
+						<button type="submit" class="btn btn-primary me-3">
+					
+						<span class="svg-icon svg-icon-2">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path opacity="0.3" d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z" fill="currentColor"/>
+								<path d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.20001C9.70001 3 10.2 3.20001 10.4 3.60001ZM16 11.6L12.7 8.29999C12.3 7.89999 11.7 7.89999 11.3 8.29999L8 11.6H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V11.6H16Z" fill="currentColor"/>
+								<path opacity="0.3" d="M11 11.6V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V11.6H11Z" fill="currentColor"/>
+							</svg>
+						</span>
+						
+						
+						Save
+						</button>
+						
+
+						<!--begin::Export-->
+						<a href="{{=URL('users','index')}}" class="btn btn-light-primary">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor"/>
+									<path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor"/>
+								</svg>
+							</span>
+							Back
+						</a>
+							<!--end::Export-->
+						<!--end::Add user-->
+						</div>
+						<!--end::Toolbar-->
+					</div>
+				</div>
+			</div>
+			</form>
+       
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Card-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::Content-->
+{{end}}
+
+{{block script}}
+<script>
+	$(".kt_datepicker_flat").flatpickr();
+	
+</script>
+{{end}}
+
+
+
+
+

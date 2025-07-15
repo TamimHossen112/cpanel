@@ -1,0 +1,80 @@
+{{extend 'layout.html'}}
+{{block content}}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+  <!--begin::Container-->
+  <div class="container-xxl" id="kt_content_container">
+    <!--begin::Contact-->
+    <div class="card">
+      <!--begin::Body-->
+      <div class="card-body p-lg-17">
+        <!--begin::Row-->
+        <div class="row mb-3">
+          <!--begin::Col-->
+          <div class="col-md-12 pe-lg-10">
+            <!--begin::Form-->
+            <form action="{{=URL('employee','import_employees')}}" class="form mb-15" method="post" id="kt_contact_form">
+              <h1 class="fw-bold text-dark mb-9">Employees Batch - Batch Upload</h1>
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-10 fv-row">
+                <label class="fs-6 fw-semibold mb-2">
+                  Download this <a href="{{=URL('static','employeesbatch_upload_format.xlsx')}}">Excel Template</a> , fillup with data and copy (maximum 200 records)-paste bellow to upload 
+                </label>
+                <textarea class="form-control form-control-solid" rows="6" name="excel_data" placeholder=""></textarea>
+              </div>
+              <!--end::Input group-->
+
+              <!--begin::Submit-->
+              <button type="submit" class="btn btn-primary" id="kt_contact_submit_button">
+                <!--begin::Indicator label-->
+                <span class="indicator-label">Upload</span>
+                <!--end::Indicator label-->
+                <!--begin::Indicator progress-->
+                <span class="indicator-progress">uploading...
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                <!--end::Indicator progress-->
+              </button>
+              <!--end::Submit-->
+            </form>
+            <!--end::Form-->
+          </div>
+          <!--end::Col-->
+          <!--begin::Col-->
+          <div class="col-md-12 pe-lg-10">
+            <!--begin::Form-->
+            <!-- <form action="" class="form mb-15" method="post" id="kt_contact_form"> -->
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-10 fv-row">
+                <label class="fs-6 fw-semibold mb-2">
+                  <div class="row">
+                    <div class="col-2 d-flex justify-content-between"><div>Total Record</div><div>:</div></div>
+                    <div class="col-10">{{=total_row}}</div>
+
+                    <div class="col-2 d-flex justify-content-between"><div>Record Saved</div><div>:</div></div>
+                    <div class="col-10">{{=count_inserted}}</div>
+
+                    <div class="col-2 d-flex justify-content-between"><div>Record Error</div><div>:</div></div>
+                    <div class="col-10">{{=count_error}} </div>
+                  </div> 
+                </label>
+                <textarea class="form-control form-control-solid" rows="6" name="err_message" placeholder="">{{=error_str}}</textarea>
+              </div>
+              <!--end::Input group-->
+            <!-- </form> -->
+            <!--end::Form-->
+          </div>
+          <!--end::Col-->
+          
+        </div>
+        <!--end::Row-->
+        
+      </div>
+      <!--end::Body-->
+    </div>
+    <!--end::Contact-->
+  </div>
+  <!--end::Container-->
+</div>
+{{end}}
+
+
+

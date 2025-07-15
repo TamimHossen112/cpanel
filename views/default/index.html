@@ -1,0 +1,203 @@
+{{from datetime import datetime
+  from datetime import date
+  today = date.today().strftime("%Y-%m-%d")
+  today = datetime.strptime(today, "%Y-%m-%d")
+}}
+{{extend 'layout.html'}}
+
+{{block header}}
+  {{controller_name = 'Dashboard'}}
+  {{function_name='Index'}}
+{{end}}
+
+{{block content}}
+<style>
+  body .bg-primary{
+    background-color: #0012A9 !important;
+  }
+</style>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+  <!--begin::Container-->
+  <div class="container-xxl" id="kt_content_container">
+    <div class="row">
+      <div class="col-xl-8">
+        <!--begin::Row-->
+        <div class="row gy-5 g-xl-8 mb-6">
+          <!--begin::Col-->
+          <div class="col-md-4">
+            {{from datetime import datetime
+              now = datetime.now()
+              curent_date = now.strftime("%Y-%m-%d")   
+            }}
+            <!--begin::Statistics Widget 5-->
+            <a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8" style="background-color: #04c8c8 !important">
+              <!--begin::Body-->
+              <div class="card-body">
+                <span class="svg-icon svg-icon-white svg-icon-3x me-5">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path opacity="0.3"
+                      d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
+                      fill="currentColor"></path>
+                    <path
+                      d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
+                      fill="currentColor"></path>
+                  </svg>
+                </span>
+
+                <div class="text-white fw-bold fs-2 mb-2 mt-5">
+                  Present
+                </div>
+                <div class="fw-semibold text-white">10</div>
+              </div>
+              <!--end::Body-->
+            </a>
+            <!--end::Statistics Widget 5-->
+          </div>
+         
+          <div class="col-md-4">
+
+            <!--begin::Statistics Widget 5-->
+            <a href="#" class="card bg-danger hoverable card-xl-stretch mb-xl-8" style="background-color: #f1416c !important">
+              <!--begin::Body-->
+              <div class="card-body">
+                <span class="svg-icon svg-icon-white svg-icon-3x me-5">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path opacity="0.3"
+                      d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
+                      fill="currentColor"></path>
+                    <path
+                      d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
+                      fill="currentColor"></path>
+                  </svg>
+                </span>
+
+                <div class="text-white fw-bold fs-2 mb-2 mt-5">
+                  Absent
+                </div>
+
+                <div class="fw-semibold text-white">
+                  111
+                </div>
+              </div>
+              <!--end::Body-->
+            </a>
+            <!--end::Statistics Widget 5-->
+          </div>
+          <div class="col-md-4">
+            <!--begin::Statistics Widget 5-->
+            <a href="#" class="card bg-success hoverable card-xl-stretch mb-xl-8" style="background-color: #7239ea !important">
+              <!--begin::Body-->
+              <div class="card-body">
+                <span class="svg-icon svg-icon-white svg-icon-3x me-5">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path opacity="0.3"
+                      d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
+                      fill="currentColor"></path>
+                    <path
+                      d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
+                      fill="currentColor"></path>
+                  </svg>
+                </span>
+
+                <div class="text-white fw-bold fs-2 mb-2 mt-5">
+                  On Leave
+                </div>
+
+                <div class="fw-semibold text-white">
+                  10
+                </div>
+              </div>
+              <!--end::Body-->
+            </a>
+            <!--end::Statistics Widget 5-->
+          </div>
+          <!--begin::Row-->
+        </div>
+
+      </div>
+      
+      <div class="col-xl-4">
+        <!--begin::List Widget 3-->
+        <div class="card card-xxl-stretch mb-6">
+          <!--begin::Header-->
+          <div class="card-header border-0">
+            <h3 class="card-title fw-bold text-dark">Notice Board</h3>
+            <div class="card-toolbar">
+            </div>
+          </div>
+          <!--end::Header-->
+          <!--begin::Body-->
+          <div class="card-body pt-5">
+            <div class="scroll-y me-n5 pe-5" style="height: 175px;">
+            
+                <!--begin::Item-->
+                <div class="d-flex align-items-start mb-8">
+                  <!--begin::Bullet-->
+                  <span class="bullet bullet-vertical h-10px w-10px mt-2 "></span>
+                  <!--end::Bullet-->
+                  <!--begin::Description-->
+                  <div class="flex-grow-1 mx-5">
+                    <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">AAA</a><br>
+                    <div class="text-muted fw-bold fs-7 mb-1">
+                      Publish Date: <span class="fw-bold">a</span>
+                    </div>
+                    <span class="text-muted fw-semibold d-block" style="text-align: justify;text-justify: inter-word;">S</span>
+                  </div>
+                  <!--end::Description-->
+                </div>
+                <!--end:Item-->
+              
+            </div>
+            
+          </div>
+          <!--end::Body-->
+        </div>
+        <!--end:List Widget 3-->
+        <!--begin::List Widget 3-->
+        <div class="card card-xxl-stretch mb-6 py-1">
+          <!--begin::Header-->
+          <div class="card-header border-0">
+            <h3 class="card-title fw-bold text-dark">Upcoming Holidays</h3>
+            <div class="card-toolbar">
+            </div>
+          </div>
+          <!--end::Header-->
+          <!--begin::Body-->
+          <div class="card-body pt-5">
+            <div class="scroll-y me-n5 pe-5" style="height: 185px;">
+              <!--begin::Item-->
+              <div class="d-flex align-items-center mb-8">
+                <!--begin::Bullet-->
+                <span class="bullet bullet-vertical h-40px "></span>
+                <!--end::Bullet-->
+                <!--begin::Description-->
+                <div class="flex-grow-1 mx-5">
+                  <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">SDSD</a>
+                  <span class="text-muted fw-semibold d-block">ZCX</span>
+                </div>
+                <!--end::Description-->
+                
+                <span class="badge fs-8 fw-bold">KJ</span>
+              </div>
+              <!--end:Item-->
+            </div>
+            
+          </div>
+          <!--end::Body-->
+        </div>
+        <!--end:List Widget 3-->
+      </div>
+    </div>
+
+  </div>
+  <!--end::Container-->
+</div>
+<!--end::Content-->
+
+{{end}}
+
+
+{{block script}}
+
+{{end}}

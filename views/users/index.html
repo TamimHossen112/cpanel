@@ -40,6 +40,28 @@
                         </select>
                     </div>
                   </div>
+                  <div class="col-md-3">
+                    <div class="mb-10">
+                      <select class="form-select form-select-solid" name="project_name" data-control="select2" data-placeholder="Project Name" data-allow-clear="true">
+                        <option value=""></option>
+                          {{for project in project_lists:}}  
+                            <option value="{{=project['project_name']}}" {{if str(project['project_name']) == str(request.vars.project_name):}} selected {{pass}}>{{=project['project_name']}}</option>   
+                          {{pass}}
+                      </select>
+                    </div>
+
+                  </div>
+                  <div class="col-md-3">
+                    <div class="mb-10">
+                        <select class="form-select form-select-solid" name="role_id" data-control="select2" data-placeholder="Role name" data-allow-clear="true">
+                          <option value=""></option>
+                            {{for role in role_lists:}}  
+                              <option value="{{=role['id']}}" {{if str(role['id']) == str(request.vars.role_id):}} selected {{pass}}>{{=role['role_name']}}</option>   
+                            {{pass}}     
+                        </select>
+                    </div>
+
+                  </div>
                   
                   
                   <div class="col-md-3">
@@ -63,16 +85,7 @@
                     </select>
                     </div>
                   </div>
-                  {{if session.user_role == 'system_admin':}}
-                  <div class="col-md-3">
-                    <div class="mb-10">
-                      <select class="form-select form-select-solid" name="user_role" data-control="select2" data-placeholder="Employee Role" data-allow-clear="true">
-                      <option></option>
-                      <option value="system_admin" {{ if str(request.vars.user_role) == 'system_admin':}}selected{{pass}}>System Admin</option>   
-                      </select>
-                  </div>
-                </div>
-                {{pass}}
+                  
                   
 
                   <div class="col d-flex justify-content-end">
@@ -131,10 +144,8 @@
                 <!--end::Export-->
                 <!--begin::Export-->
                 {{task_id='user_create'
-                task_id_alt='user_create_alt'
-                access_permission=check_role(task_id)  
-                access_permission_alt=check_role(task_id_alt)  
-                if ((access_permission!=False) or (access_permission_alt!=False)):}}
+                access_permission=check_role(task_id)
+                if (access_permission!=False):}}
                 <a href="{{=URL('users','import_employees')}}" type="button" class="btn btn-light-primary me-3">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                   <span class="svg-icon svg-icon-2">
@@ -157,10 +168,8 @@
               <!--begin::Toolbar-->
                 <!--begin::Add user-->
                 {{task_id='user_create'
-                task_id_alt='user_create_alt'
-                access_permission=check_role(task_id)  
-                access_permission_alt=check_role(task_id_alt)  
-                if ((access_permission!=False) or (access_permission_alt!=False)):}}
+                access_permission=check_role(task_id)
+                if (access_permission!=False):}}
                 <a href="{{=URL('users','create')}}" class="btn btn-primary">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                 <span class="svg-icon svg-icon-2">
@@ -248,7 +257,8 @@
             d.user_id = $("select[name='user_id']").val()
             d.cid = $("select[name='cid']").val()
             d.status = $("select[name='status']").val()
-            d.user_role = $("select[name='user_role']").val()
+            d.project_name = $("select[name='project_name']").val()
+            d.role_id = $("select[name='role_id']").val()
         },
         dataSrc: function(json) {
             return json.data;

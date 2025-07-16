@@ -135,6 +135,8 @@ db.define_table('u_role_has_tasks',
 #=====================Employees Table================
 db.define_table('users',
                 Field('cid','string',length=20,requires=IS_NOT_EMPTY(),default=session.cid),
+                Field('pid','string',length=50,requires=IS_NOT_EMPTY(),default=session.cid),
+                
                 Field('user_id','string',length=20,unique=True,requires=IS_NOT_EMPTY()),
                 Field('first_name','string',length=100,requires=[IS_NOT_EMPTY(),IS_LENGTH(50,error_message='enter maximum 50 character')]),
                 Field('last_name','string',length=100,requires=[IS_NOT_EMPTY(),IS_LENGTH(50,error_message='enter maximum 50 character')]),

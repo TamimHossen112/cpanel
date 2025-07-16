@@ -1,6 +1,9 @@
 def index():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
     isSearch = False
     if  request.vars.cid != None and request.vars.cid != '':
@@ -25,10 +28,12 @@ def index():
     return locals()
 
 def create():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
-    # if session.emp_role in ['management','unit_management']:
-    #     return "Access Denied"
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
+        
     sql = """
     SELECT * from business_units 
     """
@@ -43,8 +48,11 @@ def create():
 
 
 def submit():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
     
     cid = request.vars.cid
     project_name = request.vars.project_name
@@ -96,11 +104,12 @@ def submit():
     return  dict(redirect(URL('role_list','index')))
     
 def edit():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
-    # if session.emp_role in ['management','unit_management']:
-    #     return "Access Denied"
 
     if request.args(0):        
         roles=db(db.u_roles.id==request.args(0)).select().first()
@@ -117,8 +126,11 @@ def edit():
         return dict(roles=roles,business_units=business_units, project_lists=project_lists)
 
 def update():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))        
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))      
 
     cid = request.vars.cid
     project_name = request.vars.project_name
@@ -172,8 +184,11 @@ def update():
 
 ## delete start##
 def delete():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
     
     if request.args(0):
         role_tasks=db(db.u_role_has_tasks.role_id==request.args(0)).select()
@@ -191,8 +206,8 @@ def delete():
     ## delete end##
 
 def get_data():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    
+        
         #Search Start##
     conditions = ""
     if  request.vars.cid != None and request.vars.cid != '':
@@ -242,12 +257,14 @@ def get_data():
 
 
 def role_has_task():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
-    # if session.emp_role in ['management','unit_management']:
-    #     return "Access Denied"
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
+    
     sql = """
-    SELECT * from business_units where sbu_name="TCL"
+    SELECT * from business_units
     """
     business_units = db.executesql(sql, as_dict=True)
     if request.args(0):        
@@ -286,8 +303,11 @@ def role_has_task():
     return locals()
 
 def role_has_task_submit():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)  
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
     
     cid = request.vars.cid
     role_id = request.vars.role_id

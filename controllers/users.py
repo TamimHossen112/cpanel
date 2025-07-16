@@ -51,6 +51,17 @@ def index():
     SELECT * from business_units
     """
     business_units = db.executesql(sql, as_dict=True)
+    
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
+    
+    sql = """
+    SELECT * from u_roles
+    """
+    role_lists = db.executesql(sql, as_dict=True)
+    
     return locals()
 
 def create():
@@ -79,6 +90,10 @@ def create():
     SELECT * from u_roles
     """
     user_roles = db.executesql(sql, as_dict=True)
+    sql = """
+    SELECT * from projects
+    """
+    project_lists = db.executesql(sql, as_dict=True)
     return locals()
 
 
@@ -144,6 +159,7 @@ def submit():
     gender = str(request.vars.gender)
     location = str(request.vars.location)
     passwordStr=str(request.vars.password)
+    project_name = str(request.vars.project_name)
     if request.vars.status is not None:
         status = str(request.vars.status)
     else:
@@ -154,6 +170,8 @@ def submit():
         
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
     if not user_role:
         errors.append('User Role is required.')
     if not first_name:
@@ -190,6 +208,7 @@ def submit():
     #insert start
     db.users.insert(     
                 cid = cid,
+                pid = project_name,
                 user_id = user_id,
                 first_name = first_name,
                 last_name = last_name,
@@ -245,15 +264,18 @@ def edit():
         SELECT * from u_roles
         """
         user_roles = db.executesql(sql, as_dict=True)
+        
+        sql = """
+        SELECT * from projects  
+        """
+        project_lists = db.executesql(sql, as_dict=True)
 
-        return dict(user_data=user_data,business_units=business_units,user_roles=user_roles)
+        return dict(user_data=user_data,business_units=business_units,user_roles=user_roles,project_lists=project_lists)
 
 def update():
     task_id='user_create'
-    task_id_alt='user_create_alt'
     access_permission=check_role(task_id)  
-    access_permission_alt=check_role(task_id_alt)  
-    if ((access_permission==False) and (access_permission_alt==False)):
+    if (access_permission==False):
         session.flash = {"msg_type":"error","msg":"Access is Denied !"}
         redirect (URL('default','index'))
     # if session.status=="" or session.status==None:
@@ -307,6 +329,7 @@ def update():
     
     location = str(request.vars.location)
     passwordStr=str(request.vars.password)
+    project_name = str(request.vars.project_name)
     if request.vars.status is not None:
         status = str(request.vars.status)
     else:
@@ -320,6 +343,8 @@ def update():
 
     if not cid:
         errors.append('SBU is required.')
+    if not project_name:
+        errors.append('Project Name is required.')
     if not user_role:
         errors.append('User Role is required.')
     if not first_name:
@@ -358,6 +383,7 @@ def update():
     user_data.update_record(     
                         image_path = image_path,
                         cid = cid,
+                        pid = project_name,
                         user_id = user_id,
                         first_name = first_name,
                         last_name = last_name,
@@ -417,15 +443,21 @@ def get_data():
         status = request.vars.status
         conditions = conditions +" and status = '"+status+"'"
         
-    if  request.vars.user_role != None and request.vars.user_role !='':
-        conditions = conditions +" and user_role = '"+request.vars.user_role+"'"
+    if  request.vars.role_id != None and request.vars.role_id !='':
+        conditions = conditions +" and role_id = '"+request.vars.role_id+"'"
+        
+    if request.vars.project_name != None and request.vars.project_name != '':
+        project_name = request.vars.project_name
+        conditions = conditions + " and pid = '"+str(project_name)+"'"
     
 
 
     #Search End## 
 
     ##Paginate Start##
-    total_rows = len(db.executesql( "SELECT * from users WHERE 1 "+conditions, as_dict=True))
+    total_result = db.executesql("SELECT count(id) as total_row from users WHERE 1" +conditions, as_dict=True)
+    total_rows = total_result[0]['total_row'] if total_result else 0
+    
 
     page = int(request.vars.page or 1)
     rows_per_page = int(request.vars.rows_per_page or 10)

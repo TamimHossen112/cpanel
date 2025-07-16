@@ -1,14 +1,16 @@
 def index():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index')) 
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
     isSearch = False
 
     if  request.vars.cid != None and request.vars.cid !='':
        isSearch = True
     conditions=''
-    if session.emp_role in ['unit_system_admin','unit_management']:
-       conditions += " and cid = '{}'".format(session.cid)
+
     
     sql = """
     SELECT * from business_units
@@ -18,8 +20,11 @@ def index():
     return locals()   
   
 def create():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index')) 
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
     
     return locals()
@@ -27,8 +32,11 @@ def create():
 
 
 def submit():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
         
     if request.vars.status is not None:
         status = str(request.vars.status)
@@ -80,8 +88,11 @@ def submit():
 
 def edit():
 
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
     if request.args(0):
         business_units = db(db.business_units.id == request.args(0)).select().first()
@@ -89,8 +100,11 @@ def edit():
         return dict(business_units=business_units)
 
 def update():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
     
     business_units = db(db.business_units.id == request.args(0)).select().first()
     if request.vars.status is not None:
@@ -141,8 +155,11 @@ def update():
 
 
 def delete():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
+    task_id='role_management'
+    access_permission=check_role(task_id)   
+    if ((access_permission==False)):
+        session.flash = {"msg_type":"error","msg":"Access is Denied !"}
+        redirect (URL('default','index'))
 
     if request.args(0):
         session.flash = T("Deleted Information")
@@ -155,8 +172,6 @@ def delete():
     return dict(redirect(URL('business_units', 'index')))
 
 def get_data():
-    if session.status=="" or session.status==None:
-        redirect(URL(c='login',f='index'))
     #Search Start##
     conditions = ""
     if  request.vars.cid != None and request.vars.cid !='':

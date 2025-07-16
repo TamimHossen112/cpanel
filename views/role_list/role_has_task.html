@@ -32,7 +32,7 @@
 						<select class="form-select form-select-solid" name="cid" data-control="select2" data-placeholder="SBU" readonly>
 						<option></option>
 						{{for business_unit in business_units:}}
-							<option value="{{=business_unit['sbu_name']}}" selected >{{=business_unit['sbu_name']}}</option>  
+							<option value="{{=business_unit['sbu_name']}}" {{if business_unit['sbu_name'] == roles.cid:}} selected {{pass}}>{{=business_unit['sbu_name']}}</option>  
 						{{pass}}
 					</select>
 					</div>
